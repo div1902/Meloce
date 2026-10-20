@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en" data-vibe="candlelight">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#09090b">
+  <meta name="description" content="MELOCE is a creative technology concept studio transforming premium restaurants through expressive menus, seamless reservations, and thoughtful digital experiences.">
+  <title>MELOCE — Digital experiences, exceptionally served.</title>
+  <!-- Single-file build. Only Tailwind and Google Fonts require internet access.
+       Critical styles, illustrations, and interactions are embedded for offline resilience.
+       Tailwind's browser CDN is requested here; a strict production CSP should use compiled CSS. -->
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.1.13"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* Foundations: the lighting palette changes the entire experience. */
+    :root{color-scheme:dark;--bg:#09090b;--ink:#f1eee7;--muted:#a5a39d;--accent:#d4c39a;--rgb:212,195,154;--line:rgba(255,255,255,.12);--serif:"Cormorant Garamond",Georgia,serif;--sans:"Plus Jakarta Sans",Arial,sans-serif}
+    html[data-vibe="lounge"]{--accent:#c5b6ee;--rgb:175,144,226}
+    html[data-vibe="neon"]{--accent:#bbf286;--rgb:167,232,109}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;scroll-padding-top:110px}
+    body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.65 var(--sans);overflow-x:hidden}
+    button,input,textarea{font:inherit}
+    button,a,input,textarea{-webkit-tap-highlight-color:transparent}
+    button,a{touch-action:manipulation}
+    button{color:inherit;cursor:pointer}
+    button{border:0}
+    a{color:inherit;text-decoration:none}
+    button,a,.card{transition:background .3s ease-out,color .3s ease-out,border-color .3s ease-out,transform .3s ease-out,box-shadow .3s ease-out}
+    button:disabled{cursor:not-allowed}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:5px}
+    ::selection{background:var(--accent);color:var(--bg)}
+    h1,h2,h3,p{margin:0}
+    h2,h3{font-weight:400}
+    svg{display:block;width:100%;height:100%}
+    .arrow{display:inline-block;width:12px;height:12px;vertical-align:-2px;fill:none;stroke:currentColor;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
+    .shell{width:min(1240px,calc(100% - 80px));margin-inline:auto}
+    .eyebrow{font-size:10px;font-weight:600;letter-spacing:.18em;text-transform:uppercase}
+    .muted{color:var(--muted)}
+    .accent{color:var(--accent)}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    .skip{position:fixed;top:12px;left:12px;transform:translateY(-160%);z-index:200;background:var(--ink);color:var(--bg);padding:12px 20px;border-radius:24px}
+    .skip:focus{transform:translateY(0)}
+    .ambient{position:fixed;inset:0;pointer-events:none;z-index:-1;overflow:hidden}
+    .ambient:before,.ambient:after{content:"";position:absolute;width:80vw;height:80vw;max-width:1100px;max-height:1100px;background:radial-gradient(ellipse,rgba(var(--rgb),.09),transparent 65%);animation:drift 24s ease-in-out infinite alternate}
+    .ambient:before{top:-35%;right:-35%}
+    .ambient:after{bottom:-40%;left:-35%;animation-delay:-12s}
+    @keyframes drift{to{transform:translate(-9%,14%) scale(1.15)}}
+    @keyframes pulse{50%{opacity:.4}}
+    @keyframes arrive{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+    /* Floating navigation with one translating pill for hover, focus, and scroll. */
+    .header{height:104px;display:flex;align-items:center;justify-content:space-between;position:relative;z-index:20}
+    .wordmark{font-family:var(--serif);font-weight:600;font-size:26px;letter-spacing:.08em;line-height:1}
+    .wordmark sup{font:10px var(--sans);vertical-align:top;display:inline-block;margin:5px 0 0 4px;letter-spacing:0}
+    .nav{position:fixed;top:27px;left:50%;transform:translateX(-50%);display:flex;padding:5px;border:1px solid var(--line);border-radius:50px;background:rgba(19,19,20,.8);backdrop-filter:blur(20px);box-shadow:0 8px 40px #0004}
+    .nav a{position:relative;padding:9px 20px;font-size:11px;z-index:1;border-radius:30px;color:#c5c3bd}
+    .nav a[aria-current="location"],.nav a:hover{color:#fff}
+    .nav-pill{position:absolute;left:0;top:5px;bottom:5px;border-radius:30px;background:#ffffff0e;border:1px solid #ffffff0b;transition:transform .3s ease-out,width .3s ease-out;pointer-events:none}
+    .availability{display:flex;align-items:center;gap:9px;font-size:10px;color:var(--muted)}
+    .dot{height:5px;width:5px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px rgba(var(--rgb),.5);display:inline-block;flex-shrink:0}
+    /* Hero: editorial type and original, self-contained SVG culinary artwork. */
+    .hero{position:relative;display:grid;grid-template-columns:1.6fr 1fr;align-items:center;gap:20px;padding:64px 0 62px}
+    .hero-copy{position:relative;z-index:2}
+    .hero .eyebrow{display:flex;align-items:center;gap:12px;margin-bottom:28px}
+    .hero .eyebrow:before{content:"";width:30px;height:1px;background:var(--accent)}
+    h1{font:400 clamp(54px,5.9vw,82px)/.99 var(--serif);letter-spacing:-.055em}
+    h1 .opening{display:block;color:#ddd9d0}
+    h1 em{display:block;color:var(--accent);font-weight:400;margin-top:10px;transition:color .3s ease-out}
+    .hero-description{max-width:390px;color:var(--muted);font-size:12px;line-height:1.9;margin:27px 0}
+    .hero-actions{display:flex;gap:24px;align-items:center;flex-wrap:wrap}
+    .primary{display:inline-flex;align-items:center;justify-content:center;gap:28px;background:var(--accent);color:#171610;border:1px solid transparent;border-radius:6px;padding:13px 19px;font-size:11px;font-weight:700}
+    .primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(var(--rgb),.15)}
+    .text-link{font-size:11px;border-bottom:1px solid var(--line);padding-bottom:4px}
+    .mode-row{display:flex;align-items:center;gap:12px;margin-top:35px;font-size:10px;color:var(--muted)}
+    .mode-row [data-mode-label="fine"]{color:var(--ink)}
+    .switch{width:40px;height:23px;padding:3px;border-radius:20px;background:#252522;border:1px solid #ffffff20;flex-shrink:0}
+    .switch:before{content:"";display:block;width:15px;height:15px;border-radius:50%;background:var(--accent);transform:translateX(16px);transition:transform .3s ease-out,background .3s ease-out}
+    .switch[aria-checked="false"]:before{transform:translateX(0);background:#c7ff8b}
+    body.fast h1{font-family:var(--sans);font-size:clamp(42px,4.5vw,63px);font-weight:800;line-height:1.08;letter-spacing:-.065em}
+    body.fast h1 em{color:#c7ff8b;font-style:normal}
+    body.fast [data-mode-label="fast"]{color:#c7ff8b}
+    body.fast [data-mode-label="fine"]{color:var(--muted)}
+    .hero-art{position:relative;aspect-ratio:1;min-width:0;isolation:isolate;overflow:clip}
+    .hero-art:before{content:"";position:absolute;inset:5%;border-radius:50%;background:radial-gradient(circle,rgba(var(--rgb),.13),transparent 70%);filter:blur(25px)}
+    .orbit{position:absolute;inset:2%;border:1px solid rgba(var(--rgb),.15);border-radius:50%;transform:rotate(-24deg)}
+    .orbit:before{content:"";position:absolute;top:50%;left:-3px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+    .hero-art>svg{position:relative;transform:rotate(-12deg);filter:drop-shadow(0 28px 30px #0009);transition:transform .8s ease-out}
+    .hero-art:hover>svg{transform:rotate(0) scale(1.03)}
+    .art-tag{position:absolute;bottom:4%;left:1%;padding:13px 17px;border:1px solid var(--line);border-radius:9px;background:#171719b8;backdrop-filter:blur(12px);box-shadow:0 10px 25px #0004}
+    .art-tag strong{display:block;font:italic 23px var(--serif);margin-top:4px}
+    .art-coordinate{position:absolute;top:1%;right:5%;font-size:9px;letter-spacing:.1em;color:var(--muted)}
+    .hero-bottom{display:flex;justify-content:space-between;gap:20px;border-top:1px solid var(--line);padding:20px 0;color:var(--muted);font-size:9px;letter-spacing:.12em;text-transform:uppercase}
+    .capabilities{display:flex;gap:28px}
+    /* Asymmetric bento: every tile contains a functional interaction. */
+    #work{padding:80px 0 70px}
+    .section-head{display:flex;align-items:end;justify-content:space-between;gap:25px;margin-bottom:30px}
+    .section-head h2{font:400 clamp(36px,4vw,52px)/1.1 var(--serif);letter-spacing:-.025em;margin-top:12px}
+    .section-head p{font-size:11px;max-width:230px;color:var(--muted)}
+    .bento{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px}
+    .card{position:relative;min-width:0;border:1px solid var(--line);border-radius:16px;background:linear-gradient(130deg,#ffffff04,transparent),#111113b8;padding:28px;overflow:hidden;backdrop-filter:blur(12px)}
+    .card:hover{border-color:rgba(var(--rgb),.38);box-shadow:0 0 36px rgba(var(--rgb),.035)}
+    .card-top{display:flex;justify-content:space-between;gap:10px;align-items:center}
+    .card-number{font-size:10px;color:#8e8d88;font-variant-numeric:tabular-nums}
+    .card h3{font:400 31px/1.15 var(--serif);letter-spacing:-.02em;margin-top:18px}
+    .card-description{color:var(--muted);font-size:11px;margin-top:7px}
+    .menu-card{grid-column:span 7}
+    .booking-card{grid-column:span 5}
+    .vibe-card{grid-column:span 5}
+    .kitchen-card{grid-column:span 7}
+    .card-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:9px;color:var(--muted);border-top:1px solid var(--line);padding-top:15px;margin-top:21px}
+    .badge{border:1px solid var(--line);border-radius:20px;padding:4px 9px;font-size:8px;letter-spacing:.08em;text-transform:uppercase}
+    .menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-top:24px}
+    .dish{display:grid;grid-template-columns:1fr auto;gap:5px 10px;text-align:left;background:#131315;padding:18px 16px;position:relative;min-height:99px}
+    .dish:hover,.dish:focus-visible{background:#23231f}
+    .dish-name{font:22px/1.1 var(--serif)}
+    .dish-price{color:var(--accent);font-size:10px}
+    .dish-note{font-size:9px;color:var(--muted);align-self:end}
+    .dish-arrow{font-size:14px;color:var(--accent);align-self:end;transition:transform .3s ease-out}
+    .dish:hover .dish-arrow{transform:translate(2px,-2px)}
+    /* Pointer preview stays within the viewport; touch opens the same dish in a dialog. */
+    .preview{position:fixed;top:0;left:0;width:200px;padding:9px;z-index:60;border:1px solid rgba(var(--rgb),.4);border-radius:12px;background:#19191beF;box-shadow:0 25px 70px #0009;backdrop-filter:blur(16px);pointer-events:none;opacity:0;transition:opacity .2s ease-out}
+    .preview.visible{opacity:1}
+    .preview svg{height:155px;border-radius:7px;background:radial-gradient(circle,#30302a,#101011)}
+    .preview p{font:italic 20px var(--serif);padding:8px 3px 2px}
+    .booking-meta{display:flex;justify-content:space-between;gap:10px;margin-top:22px;font-size:9px;color:var(--muted)}
+    .floor{position:relative;margin-top:12px;padding:26px 22px 21px;border:1px solid var(--line);border-radius:10px;background:repeating-linear-gradient(90deg,transparent,transparent 25px,#ffffff02 26px),#0d0d0f}
+    .window-line{position:absolute;top:8px;left:25%;right:25%;text-align:center;font-size:7px;letter-spacing:.25em;color:var(--accent);border-bottom:1px solid rgba(var(--rgb),.3);padding-bottom:4px}
+    .tables{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:26px 18px;margin-top:14px}
+    .table{height:42px;position:relative;border-radius:7px;border:1px solid #ffffff25;background:#202022;font-size:9px;font-variant-numeric:tabular-nums}
+    .table:before,.table:after{content:"";position:absolute;left:22%;right:22%;height:4px;background:#343436;border-radius:2px;transition:background .3s ease-out}
+    .table:before{top:-7px}.table:after{bottom:-7px}
+    .table:hover:not(:disabled){border-color:var(--accent);transform:translateY(-2px)}
+    .table[aria-pressed="true"]{background:rgba(var(--rgb),.2);border-color:var(--accent);color:var(--accent);box-shadow:0 0 18px rgba(var(--rgb),.13)}
+    .table[aria-pressed="true"]:before,.table[aria-pressed="true"]:after{background:var(--accent)}
+    .table:disabled{opacity:.3;background:repeating-linear-gradient(45deg,#323234,#323234 1px,#171719 1px,#171719 5px)}
+    .legend{display:flex;flex-wrap:wrap;gap:14px;font-size:8px;color:var(--muted);margin-top:20px}
+    .legend span{display:flex;align-items:center;gap:5px}
+    .legend i{width:5px;height:5px;background:#777;border-radius:2px}
+    .legend .selected{background:var(--accent)}.legend .unavailable{background:#38383b}
+    .icon-button{background:transparent;border:1px solid var(--line);border-radius:6px;font-size:9px;padding:5px 9px;white-space:nowrap}
+    .icon-button:hover{background:#ffffff0d;border-color:var(--accent)}
+    #seat-status{min-height:30px;display:flex;align-items:center}
+    .vibe-display{display:flex;align-items:center;gap:22px;margin:20px 0}
+    .lamp{height:82px;width:82px;flex-shrink:0;border:1px solid rgba(var(--rgb),.2);border-radius:50%;position:relative;background:radial-gradient(ellipse at 50% 80%,rgba(var(--rgb),.3),transparent 65%)}
+    .lamp:before{content:"";position:absolute;top:18px;left:23px;width:34px;height:22px;background:var(--accent);clip-path:polygon(20% 0,80% 0,100% 100%,0 100%);filter:drop-shadow(0 0 10px var(--accent))}
+    .lamp:after{content:"";position:absolute;top:40px;left:39px;width:3px;height:25px;background:var(--accent);box-shadow:0 0 16px var(--accent)}
+    .vibe-display strong{font:italic 25px var(--serif);display:block;color:var(--accent)}
+    .vibe-display p{font-size:10px;color:var(--muted);margin-top:4px}
+    .vibe-options{display:flex;gap:6px}
+    .vibe-option{flex:1;min-width:0;background:transparent;padding:9px 5px;border:1px solid var(--line);border-radius:7px;font-size:9px;display:flex;align-items:center;justify-content:center;gap:5px}
+    .vibe-option[aria-pressed="true"]{background:rgba(var(--rgb),.1);border-color:rgba(var(--rgb),.5);color:var(--accent)}
+    .swatch{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+    .kitchen-heading{display:flex;align-items:center;justify-content:space-between;gap:15px}
+    .kitchen-heading h3{margin-top:0}
+    .kitchen-toolbar{display:flex;gap:7px}
+    .orders{margin-top:18px;min-height:132px}
+    .order{display:grid;grid-template-columns:46px 1fr auto;gap:9px;align-items:center;border-bottom:1px solid #ffffff09;padding:11px 0;font-size:10px;animation:arrive .3s ease-out}
+    .order-id{color:#92918d;font-size:9px}
+    .order-state{font-size:8px;border-radius:4px;padding:3px 6px;letter-spacing:.03em;white-space:nowrap}
+    .state-0{color:#d8cda9;background:#c6b48012}.state-1{color:#ccc1f0;background:#b5a0e412}.state-2{color:#b2d6b0;background:#90bc8b12}
+    .live-dot{animation:pulse 2s ease-in-out infinite}
+    /* Philosophy and a useful, backend-free project-brief download. */
+    .philosophy{padding:55px 0 65px;display:grid;grid-template-columns:1fr 2fr;gap:60px;border-top:1px solid var(--line)}
+    .philosophy h2{font:400 clamp(32px,3.4vw,46px)/1.15 var(--serif);letter-spacing:-.025em}
+    .philosophy p{font-size:12px;color:var(--muted);max-width:490px;margin-top:22px}
+    .principles{display:flex;gap:22px;margin-top:26px;font-size:9px;color:var(--accent)}
+    .contact{padding:35px;border:1px solid var(--line);border-radius:16px;background:radial-gradient(ellipse at top right,rgba(var(--rgb),.09),transparent 65%),#111113;display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:center}
+    .contact h2{font:400 44px/1.1 var(--serif);margin:15px 0}
+    .contact p{color:var(--muted);font-size:11px;max-width:320px}
+    .brief-form{display:grid;gap:10px}
+    .brief-form label{font-size:10px;color:var(--muted)}
+    input,textarea{display:block;width:100%;margin-top:5px;padding:10px 12px;background:#09090b80;border:1px solid var(--line);color:var(--ink);border-radius:6px;font-size:12px}
+    textarea{resize:vertical;min-height:70px}
+    .brief-form .primary{justify-self:start}
+    .footer{display:flex;justify-content:space-between;gap:20px;align-items:center;padding:32px 0;font-size:9px;color:var(--muted)}
+    /* Native modal supplies focus trapping, Escape support, and an inert background. */
+    dialog{padding:0;border:1px solid rgba(var(--rgb),.3);border-radius:18px;background:#141416;color:var(--ink);width:min(650px,calc(100% - 32px));max-height:85dvh;overflow:auto;box-shadow:0 40px 100px #000b}
+    dialog::backdrop{background:#000b;backdrop-filter:blur(10px)}
+    dialog[open]{animation:arrive .3s ease-out}
+    .modal-art{height:240px;background:radial-gradient(ellipse,rgba(var(--rgb),.12),#0d0d0f);padding:6px}
+    .modal-content{padding:28px}
+    .modal-content h2{font:400 38px/1.1 var(--serif);margin:10px 0}
+    .modal-content p{color:var(--muted);font-size:12px}
+    .modal-close{position:absolute;top:15px;right:15px;height:36px;width:36px;border:1px solid var(--line);border-radius:50%;background:#09090bcc;font-size:22px;z-index:1}
+    .ingredient-list{display:flex;flex-wrap:wrap;gap:7px;list-style:none;padding:0;margin:17px 0}
+    .ingredient-list li{font-size:10px;border:1px solid var(--line);border-radius:20px;padding:5px 10px}
+    .toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,15px);padding:12px 20px;background:#242420;border:1px solid rgba(var(--rgb),.3);border-radius:9px;box-shadow:0 10px 40px #0008;z-index:90;font-size:11px;opacity:0;pointer-events:none;transition:opacity .3s ease-out,transform .3s ease-out;max-width:calc(100vw - 32px);width:max-content}
+    .toast.show{opacity:1;transform:translate(-50%,0)}
+    /* MELOCE visual layer: always-visible dish artwork and a responsive dining vignette. */
+    .dish-visual{grid-column:1/-1;display:block;height:116px;margin:-7px -5px 10px;border-radius:8px;background:radial-gradient(ellipse at center,rgba(var(--rgb),.13),transparent 72%);overflow:hidden}
+    .dish-visual svg{transform:rotate(-9deg) scale(1.2);filter:drop-shadow(0 9px 9px #0005);transition:transform .5s ease-out}
+    .dish:hover .dish-visual svg,.dish:focus-visible .dish-visual svg{transform:rotate(3deg) scale(1.35)}
+    .menu-card{display:flex;flex-direction:column}
+    .menu-card .card-foot{margin-top:auto;padding-top:18px}
+    .menu-card .menu-grid{margin-bottom:22px}
+    .booking-card{display:flex;flex-direction:column}
+    .booking-card .floor{flex:1;display:flex;flex-direction:column;justify-content:center;min-height:260px}
+    .booking-card .tables{gap:40px 24px}
+    .booking-card .table{height:52px}
+    .booking-card .legend{margin-top:36px}
+    .room-visual{height:136px;margin:20px -28px 0;position:relative;overflow:hidden;background:#0c0c0e}
+    .room-visual svg{width:100%;height:100%;color:var(--accent);transition:color .3s ease-out}
+    .room-visual:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#111113,transparent 35%)}
+    .vibe-display{margin:15px 0}
+    .vibe-display .lamp{width:60px;height:60px}
+    .vibe-display .lamp:before{top:12px;left:16px;width:28px;height:19px}
+    .vibe-display .lamp:after{top:31px;left:29px;height:18px}
+    .service-art{display:flex;align-items:end;justify-content:space-between;gap:20px;margin-top:24px;padding:18px 20px;border:1px solid var(--line);border-radius:10px;background:linear-gradient(120deg,rgba(var(--rgb),.07),transparent)}
+    .service-art svg{width:115px;height:65px;flex-shrink:0;color:var(--accent)}
+    .service-art p{font:italic 24px/1.1 var(--serif);color:var(--accent)}
+    .service-art span{display:block;font-size:8px;color:var(--muted);margin-top:7px;letter-spacing:.12em;text-transform:uppercase}
+    .hero-art .table-setting{position:absolute;inset:0;transform:none;filter:none;pointer-events:none}
+    .hero-art:hover .table-setting{transform:none}
+    .hero-art .hero-dish{transform:rotate(-12deg) scale(.9)}
+    .hero-art:hover .hero-dish{transform:rotate(0) scale(.94)}
+    .visual-seal{position:absolute;right:5%;bottom:8%;width:62px;height:62px;border:1px solid rgba(var(--rgb),.35);border-radius:50%;display:grid;place-content:center;text-align:center;font-size:8px;line-height:1.6;letter-spacing:.12em;color:var(--accent);background:#11111399;backdrop-filter:blur(8px);transform:rotate(12deg)}
+    @media(min-width:1440px){.hero{padding-top:85px;padding-bottom:85px}}
+    @media(max-width:950px){.shell{width:calc(100% - 48px)}.hero{grid-template-columns:1.5fr 1fr}h1{font-size:60px}.availability{display:none}.card{padding:22px}.tables{gap:25px 12px}.vibe-options{flex-wrap:wrap}.vibe-option{flex-basis:100%}.vibe-display{margin:16px 0}.contact{gap:25px}}
+    @media(max-width:700px){.shell{width:calc(100% - 36px)}.header{height:88px}.wordmark{font-size:29px}.nav{left:auto;right:18px;transform:none;top:22px}.nav a{padding:8px 13px;font-size:10px}.hero{grid-template-columns:1fr;padding:38px 0 30px;gap:20px}h1{font-size:clamp(52px,10vw,72px)}body.fast h1{font-size:clamp(39px,8vw,58px)}.hero-art{width:min(340px,85%);margin:5px auto 15px}.hero-description{max-width:340px}.hero-bottom{font-size:8px}.capabilities{gap:12px}.hero-bottom>span{display:none}#work{padding:52px 0}.section-head{align-items:start;flex-direction:column;gap:14px}.section-head p{max-width:none}.bento{gap:14px}.menu-card,.booking-card,.vibe-card,.kitchen-card{grid-column:1/-1}.card{padding:24px}.vibe-options{flex-wrap:nowrap}.vibe-option{flex-basis:auto}.philosophy{grid-template-columns:1fr;gap:25px;padding:35px 0 45px}.contact{grid-template-columns:1fr;padding:26px;gap:26px}.contact h2{font-size:38px}.footer{align-items:start;flex-wrap:wrap}.modal-art{height:200px}}
+    @media(max-width:380px){.dish{padding:13px 11px}.dish-name{font-size:20px}.card{padding:20px}.kitchen-heading{align-items:start;flex-direction:column}.order{grid-template-columns:36px 1fr auto;gap:5px;font-size:9px}.mode-row{gap:9px}}
+    @media(max-width:950px){.room-visual{margin-inline:-22px}.booking-card .tables{gap:36px 14px}.service-art{padding:15px;gap:12px}.service-art p{font-size:21px}}
+    @media(max-width:700px){.header{height:130px;justify-content:center;align-items:flex-start;padding-top:22px}.wordmark{font-size:24px}.nav{top:68px;left:50%;right:auto;transform:translateX(-50%);white-space:nowrap}.hero{padding-top:24px}.room-visual{height:155px;margin-inline:-24px}.dish-visual{height:106px}.booking-card .floor{min-height:245px}.hero-art{width:min(390px,100%)}.visual-seal{right:6%;bottom:9%}.service-art svg{width:100px}.service-art p{font-size:24px}html{scroll-padding-top:135px}}
+    @media(max-width:380px){.room-visual{margin-inline:-20px}.dish-visual{height:90px}.service-art p{font-size:21px}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}.hero-art:hover>svg{transform:rotate(-12deg)}}
+  </style>
+</head>
+<body class="antialiased">
+  <a class="skip" href="#main">Skip to content</a>
+  <div class="ambient" aria-hidden="true"></div>
+
+  <!-- Original vector food illustrations: no image downloads or broken placeholders. -->
+  <svg width="0" height="0" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
+    <defs>
+      <radialGradient id="ceramic"><stop stop-color="#333632"/><stop offset=".72" stop-color="#1c211e"/><stop offset=".77" stop-color="#111613"/><stop offset=".94" stop-color="#282e28"/><stop offset="1" stop-color="#111512"/></radialGradient>
+      <radialGradient id="sauce"><stop stop-color="#e0b96c"/><stop offset=".8" stop-color="#a47735"/><stop offset="1" stop-color="#73552d"/></radialGradient>
+      <linearGradient id="pasta" x2=".8" y2="1"><stop stop-color="#f3d697"/><stop offset=".5" stop-color="#c99b52"/><stop offset="1" stop-color="#ffe4a6"/></linearGradient>
+      <radialGradient id="burrata"><stop stop-color="#fff9de"/><stop offset=".7" stop-color="#ded8bc"/><stop offset="1" stop-color="#9b9d7b"/></radialGradient>
+      <linearGradient id="fish" x2="1" y2="1"><stop stop-color="#e7aa6f"/><stop offset=".5" stop-color="#b36b3b"/><stop offset="1" stop-color="#ebbf83"/></linearGradient>
+      <filter id="food-shadow" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="7" stdDeviation="6" flood-opacity=".5"/></filter>
+      <symbol id="plate" viewBox="0 0 400 400">
+        <circle cx="200" cy="200" r="174" fill="url(#ceramic)" stroke="#777e62" stroke-opacity=".3"/>
+        <circle cx="200" cy="200" r="164" fill="none" stroke="#b9bd9f" stroke-opacity=".13"/>
+        <circle cx="200" cy="200" r="134" fill="none" stroke="#a1a38d" stroke-opacity=".12"/>
+        <path d="M65 191a135 135 0 0 1 155-124" fill="none" stroke="#ffffff" stroke-opacity=".08" stroke-width="2"/>
+      </symbol>
+      <symbol id="herb" viewBox="0 0 60 60"><path d="M10 52 45 10" stroke="#9ba65e" stroke-width="2"/><path d="M25 35Q0 30 12 15Q32 17 25 35M31 29Q32 6 49 7Q56 27 31 29M18 44Q39 42 42 29Q24 26 18 44" fill="#748a43"/><path d="M32 28 45 12M25 33 15 20" stroke="#a2b56a" stroke-width="1"/></symbol>
+      <symbol id="dish-pasta" viewBox="0 0 400 400">
+        <use href="#plate"/><ellipse cx="200" cy="210" rx="89" ry="71" fill="url(#sauce)" opacity=".65"/>
+        <g fill="none" stroke="url(#pasta)" stroke-width="9" stroke-linecap="round" filter="url(#food-shadow)">
+          <path d="M151 235C105 169 194 123 242 161S257 265 172 246S139 141 213 150S278 223 197 242"/>
+          <path d="M160 239C120 188 165 144 211 157S266 224 213 235S141 199 171 172S246 168 247 201"/>
+          <path d="M168 231C138 206 155 170 192 171S247 192 229 218S173 234 169 204S216 175 221 202"/>
+          <path d="M145 218C129 177 166 144 204 143M184 253C238 267 273 214 254 181M188 213C169 187 204 172 218 190"/>
+        </g>
+        <g fill="#2a261e" stroke="#77715b" stroke-width="1"><path d="m157 169 23-9 13 11-19 13z"/><path d="m209 218 19-15 23 7-11 18z"/><path d="m178 235 12-19 18 13-9 13z"/></g>
+        <g fill="#eae1bb"><path d="m192 159 22 6-16 5z"/><path d="m155 208 20 3-16 7z"/><path d="m233 187 13 7-19 3z"/></g>
+        <use href="#herb" x="185" y="131" width="64" height="64" transform="rotate(22 217 163)"/>
+        <g fill="#b9aa6c"><circle cx="115" cy="193" r="2"/><circle cx="264" cy="245" r="2"/><circle cx="228" cy="288" r="1.5"/><circle cx="141" cy="265" r="2"/><circle cx="270" cy="155" r="1.5"/></g>
+      </symbol>
+      <symbol id="dish-burrata" viewBox="0 0 400 400">
+        <use href="#plate"/><ellipse cx="200" cy="208" rx="90" ry="69" fill="#818543" opacity=".45"/>
+        <g fill="#a84029" stroke="#db7851" stroke-width="3"><path d="M121 187q35-32 52 5-31 33-52-5"/><path d="M235 216q35-32 48 4-27 36-48-4"/><path d="M173 258q5-44 37-21-4 40-37 21"/></g>
+        <path d="M155 204q-9-40 31-49 7-25 21-3 47 4 42 48 8 44-39 49-48 1-55-45" fill="url(#burrata)" filter="url(#food-shadow)"/>
+        <path d="M191 162q-15 41 1 67m12-69q-5 33 16 57" fill="none" stroke="#ffffed" stroke-opacity=".45" stroke-width="3"/>
+        <use href="#herb" x="193" y="141" width="65" height="65"/>
+        <g fill="#d4b873"><circle cx="155" cy="163" r="3"/><circle cx="250" cy="254" r="3"/><circle cx="132" cy="237" r="2"/></g>
+      </symbol>
+      <symbol id="dish-fish" viewBox="0 0 400 400">
+        <use href="#plate"/><path d="M119 236q20-130 137-86-123 13-87 111z" fill="#bbc38a" opacity=".75"/>
+        <path d="m143 180 92-25q38 23 34 61l-97 26q-28-15-29-62" fill="url(#fish)" filter="url(#food-shadow)"/>
+        <path d="m155 181 91 25m-84-13 91 24m-82-11 65 18m-76-53 89 24" stroke="#f4d2a3" stroke-width="3" opacity=".65"/>
+        <g stroke="#758b44" stroke-width="7" stroke-linecap="round"><path d="m151 259 99-15m-108 2 100-15"/></g>
+        <use href="#herb" x="175" y="144" width="62" height="62"/>
+        <circle cx="270" cy="173" r="17" fill="#d9c76b"/><circle cx="270" cy="173" r="12" fill="none" stroke="#fff0af" stroke-width="2"/>
+      </symbol>
+      <symbol id="dish-dessert" viewBox="0 0 400 400">
+        <use href="#plate"/><path d="M115 217q61 80 165-29" fill="none" stroke="#80533c" stroke-width="14" stroke-linecap="round"/>
+        <rect x="151" y="153" width="97" height="94" rx="9" fill="#3e2921" filter="url(#food-shadow)" transform="rotate(-12 200 200)"/>
+        <path d="m148 163 95-20 14 66-94 20z" fill="#69442e"/>
+        <ellipse cx="204" cy="167" rx="33" ry="20" fill="url(#burrata)" transform="rotate(-20 204 167)"/>
+        <g fill="#aa404a"><circle cx="148" cy="251" r="9"/><circle cx="260" cy="226" r="8"/><circle cx="269" cy="213" r="7"/></g>
+        <g fill="#e0bd77"><circle cx="135" cy="187" r="2"/><circle cx="237" cy="267" r="3"/><circle cx="256" cy="154" r="2"/></g>
+        <use href="#herb" x="210" y="132" width="46" height="46"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <header class="header shell">
+    <a class="wordmark" href="#home" aria-label="MELOCE studio home">MELOCE</a>
+    <nav class="nav backdrop-blur-md" aria-label="Primary navigation">
+      <span class="nav-pill" aria-hidden="true"></span>
+      <a href="#work" aria-current="location">Experience</a>
+      <a href="#approach">Approach</a>
+      <a href="#studio">Let’s create <svg class="arrow" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 11 11 3M3 3h8v8"/></svg></a>
+    </nav>
+    <span class="availability"><i class="dot"></i> Independent creative technology</span>
+  </header>
+
+  <main id="main">
+    <section id="home" class="shell" aria-labelledby="headline">
+      <div class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow accent">Digital craft. Exceptional taste.</p>
+          <h1 id="headline"><span class="opening">We Don't Build<br>Restaurant Websites.</span><em>We Engineer<br>Digital Addictions.</em></h1>
+          <p class="hero-description">For restaurants that refuse to be ordinary.<br>We turn your hospitality into a digital experience<br class="desktop-break"> worth coming back for.</p>
+          <div class="hero-actions">
+            <a href="#work" class="primary transition-all duration-300 ease-out">Taste the experience <span aria-hidden="true"><svg class="arrow" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 11 11 3M3 3h8v8"/></svg></span></a>
+            <a href="#approach" class="text-link">Our philosophy</a>
+          </div>
+          <div class="mode-row">
+            <span data-mode-label="fast">Fast Casual</span>
+            <button id="style-switch" class="switch" type="button" role="switch" aria-checked="true" aria-label="Fine Dining typography"></button>
+            <span data-mode-label="fine">Fine Dining</span>
+            <span aria-hidden="true" style="margin-left:6px;opacity:.6">← change the flavor</span>
+          </div>
+        </div>
+        <div class="hero-art">
+          <div class="orbit" aria-hidden="true"></div>
+          <span class="art-coordinate">EST. IN GOOD TASTE / 01</span>
+          <!-- Fine-line cutlery and glassware frame the original plated artwork. -->
+          <svg class="table-setting" viewBox="0 0 400 400" aria-hidden="true">
+            <defs><linearGradient id="cutlery-metal"><stop stop-color="#665e4a"/><stop offset=".5" stop-color="#e9d9b3"/><stop offset="1" stop-color="#776b50"/></linearGradient></defs>
+            <g fill="none" stroke="url(#cutlery-metal)" stroke-width="2" stroke-linecap="round">
+              <path d="M33 120v30q0 10 8 10t8-10v-30m-11 0v35m6-35v35m-3 5v119"/>
+              <path d="M354 120q-12 26-10 71h10v88m0-159v71"/>
+              <ellipse cx="312" cy="55" rx="24" ry="10"/>
+              <path d="M288 55q-2 39 24 40t24-40m-24 40v32m-17 2q17-7 34 0"/>
+            </g>
+            <ellipse cx="312" cy="73" rx="19" ry="10" fill="rgba(var(--rgb),.16)"/>
+            <path d="m59 310 42 19-18 39-43-20z" fill="#b7a57f" opacity=".16"/>
+            <path d="m61 313 36 17m-40-8 36 17m-40-8 36 17" stroke="var(--accent)" stroke-opacity=".2"/>
+          </svg>
+          <svg class="hero-dish" role="img" aria-label="Illustrated truffle tagliolini on a dark ceramic plate" viewBox="0 0 400 400"><use href="#dish-pasta"/></svg>
+          <div class="art-tag"><span class="eyebrow muted" style="font-size:8px">The first bite is digital.</span><strong>A little more appetite.</strong></div>
+          <span class="visual-seal" aria-hidden="true">DIGITAL<br>HAUTE<br>CUISINE</span>
+        </div>
+      </div>
+      <div class="hero-bottom"><div class="capabilities"><span>Strategy & identity</span><span>Digital experiences</span><span>Hospitality systems</span></div><span>Scroll to savor ↓</span></div>
+    </section>
+
+    <section id="work" class="shell" aria-labelledby="work-title">
+      <div class="section-head">
+        <div><span class="eyebrow accent">The experience lab / 01—04</span><h2 id="work-title">Good taste. <em>Better interactions.</em></h2></div>
+        <p>A collection of interactive concepts.<br>Touch, explore, and make yourself at home.</p>
+      </div>
+      <div class="bento">
+        <!-- Menu buttons work identically with pointer, keyboard, or touch. -->
+        <article class="card menu-card backdrop-blur-md">
+          <div class="card-top"><span class="eyebrow muted">Maison / Digital menu</span><span class="card-number">01 <svg class="arrow" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 11 11 3M3 3h8v8"/></svg></span></div>
+          <h3>An appetite for interaction.</h3>
+          <p class="card-description">Seasonal ingredients. A rather unseasonal experience.</p>
+          <div class="menu-grid">
+            <button type="button" class="dish" data-dish="pasta" aria-haspopup="dialog"><span class="dish-visual" aria-hidden="true"><svg viewBox="0 0 400 400"><use href="#dish-pasta"/></svg></span><span class="dish-name">Truffle tagliolini</span><span class="dish-price">$38</span><span class="dish-note">Black truffle · aged parmesan</span><span class="dish-arrow" aria-hidden="true"><svg class="arrow" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 11 11 3M3 3h8v8"/></svg></span></button>
+            <button type="button" class="dish" data-dish="burrata" aria-haspopup="dialog"><span class="dish-visual" aria-hidden="true"><svg viewBox="0 0 400 400"><use href="#dish-burrata"/></svg></span><span class="dish-name">Heirloom burrata</span><span class="dish-price">$24</span><span class="dish-note">Vine tomato · basil oil</span><span class="dish-arrow" aria-hidden="true"><svg class="arrow" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 11 11 3M3 3h8v8"/></svg></span></button>
+            <button type="button" class="dish" data-dish="fish" aria-haspopup="dialog"><span class="dish-visual" aria-hidden="true"><svg viewBox="0 0 400 400"><use href="#dish-fish"/></svg></span><span class="dish-name">Miso-glazed cod</span><span class="dish-price">$42</span><span class="dish-note">White miso · spring asparagus</span><span class="dish-arrow" aria-hidden="true"><svg class="arrow" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 11 11 3M3 3h8v8"/></svg></span></button>
+            <button type="button" class="dish" data-dish="dessert" aria-haspopup="dialog"><span class="dish-visual" aria-hidden="true"><svg viewBox="0 0 400 400"><use href="#dish-dessert"/></svg></span><span class="dish-name">Chocolate crémeux</span><span class="dish-price">$18</span><span class="dish-note">Dark cacao · vanilla bean</span><span class="dish-arrow" aria-hidden="true"><svg class="arrow" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 11 11 3M3 3h8v8"/></svg></span></button>
+          </div>
+          <div class="card-foot"><span>Hover for a taste. Select for the story.</span><span class="badge">Menu concept</span></div>
+        </article>
+
+        <!-- Local booking simulation; unavailable tables are genuinely disabled. -->
+        <article class="card booking-card backdrop-blur-md">
+          <div class="card-top"><span class="eyebrow muted">The perfect placement</span><span class="card-number">02 <svg class="arrow" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 11 11 3M3 3h8v8"/></svg></span></div>
+          <h3>Your evening, reserved.</h3>
+          <p class="card-description">Pick your table. We’ll set the mood.</p>
+          <div class="booking-meta"><span>Tonight · 19:30 · 2 guests</span><button id="sound-toggle" class="icon-button" type="button" aria-pressed="false">Sound off</button></div>
+          <div class="floor">
+            <span class="window-line">GARDEN WINDOWS</span>
+            <div id="tables" class="tables" role="group" aria-label="Demo restaurant tables">
+              <button class="table" type="button" data-table="01" aria-pressed="false" aria-label="Reserve table 01">01</button>
+              <button class="table" type="button" disabled aria-label="Table 02 unavailable">02</button>
+              <button class="table" type="button" data-table="03" aria-pressed="false" aria-label="Reserve table 03">03</button>
+              <button class="table" type="button" data-table="04" aria-pressed="false" aria-label="Reserve table 04">04</button>
+              <button class="table" type="button" data-table="05" aria-pressed="false" aria-label="Reserve table 05">05</button>
+              <button class="table" type="button" data-table="06" aria-pressed="false" aria-label="Reserve table 06">06</button>
+              <button class="table" type="button" disabled aria-label="Table 07 unavailable">07</button>
+              <button class="table" type="button" data-table="08" aria-pressed="false" aria-label="Reserve table 08">08</button>
+            </div>
+            <div class="legend"><span><i></i>Available</span><span><i class="selected"></i>Your table</span><span><i class="unavailable"></i>Reserved</span></div>
+          </div>
+          <div class="card-foot"><span id="seat-status" role="status" aria-live="polite">Select a table to try a reservation.</span><button id="reset-tables" class="icon-button" type="button">Reset</button></div>
+          <p class="muted" style="font-size:8px;margin-top:7px">Interactive demo · no real booking is made.</p>
+        </article>
+
+        <!-- Ambient controls persist only a non-sensitive visual preference. -->
+        <article class="card vibe-card backdrop-blur-md">
+          <div class="card-top"><span class="eyebrow muted">Atmosphere, on demand</span><span class="card-number">03 <svg class="arrow" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 11 11 3M3 3h8v8"/></svg></span></div>
+          <h3>Set the after-hours tone.</h3>
+          <!-- The dining-room lighting follows the same live palette as the website. -->
+          <div class="room-visual" aria-hidden="true">
+            <svg viewBox="0 0 600 220" preserveAspectRatio="xMidYMid slice">
+              <defs>
+                <radialGradient id="room-light"><stop stop-color="currentColor" stop-opacity=".35"/><stop offset="1" stop-color="currentColor" stop-opacity="0"/></radialGradient>
+                <linearGradient id="room-floor" x2="0" y2="1"><stop stop-color="#26231f"/><stop offset="1" stop-color="#111113"/></linearGradient>
+              </defs>
+              <rect width="600" height="220" fill="#111113"/>
+              <path d="M0 163h600v57H0z" fill="url(#room-floor)"/>
+              <g fill="#191a19" stroke="currentColor" stroke-opacity=".2">
+                <path d="M40 166V63a48 48 0 0 1 96 0v103z"/>
+                <path d="M160 166V63a48 48 0 0 1 96 0v103z"/>
+                <path d="M344 166V63a48 48 0 0 1 96 0v103z"/>
+                <path d="M464 166V63a48 48 0 0 1 96 0v103z"/>
+              </g>
+              <g stroke="currentColor" stroke-opacity=".14"><path d="M88 18v148M208 18v148M392 18v148M512 18v148M40 99h96m24 0h96m88 0h96m24 0h96"/></g>
+              <g fill="url(#room-light)"><ellipse cx="157" cy="124" rx="120" ry="110"/><ellipse cx="443" cy="124" rx="120" ry="110"/></g>
+              <g stroke="currentColor" stroke-opacity=".65"><path d="M157 0v56M443 0v56"/></g>
+              <g fill="currentColor"><path d="m142 56-13 18h56l-13-18z"/><path d="m428 56-13 18h56l-13-18z"/></g>
+              <g fill="#302b25" stroke="#615443" stroke-width="2">
+                <path d="M89 168v-31q0-12 12-12h8q12 0 12 12v31m72 0v-31q0-12 12-12h8q12 0 12 12v31"/>
+                <path d="M375 168v-31q0-12 12-12h8q12 0 12 12v31m72 0v-31q0-12 12-12h8q12 0 12 12v31"/>
+              </g>
+              <g fill="#645644" stroke="#9c8664" stroke-opacity=".5">
+                <ellipse cx="157" cy="150" rx="55" ry="12"/><ellipse cx="443" cy="150" rx="55" ry="12"/>
+                <path d="M154 159h6v44h-6zm286 0h6v44h-6z"/>
+              </g>
+              <g fill="#ddd5bd"><ellipse cx="130" cy="149" rx="11" ry="4"/><ellipse cx="184" cy="149" rx="11" ry="4"/><ellipse cx="416" cy="149" rx="11" ry="4"/><ellipse cx="470" cy="149" rx="11" ry="4"/></g>
+              <g fill="currentColor"><rect x="155" y="132" width="4" height="14" rx="1"/><rect x="441" y="132" width="4" height="14" rx="1"/><ellipse cx="157" cy="128" rx="2" ry="4"/><ellipse cx="443" cy="128" rx="2" ry="4"/></g>
+              <g fill="#424c35"><path d="M292 165q-32-58-10-86 21 26 10 86m6 0q-1-77 23-84 9 40-23 84m-2-13q-35-15-38-40 30 0 38 40"/></g>
+              <path d="M279 161h34l-6 34h-22z" fill="#70634e"/>
+            </svg>
+          </div>
+          <div class="vibe-display"><div class="lamp" aria-hidden="true"></div><div><strong id="vibe-title">A candlelit affair.</strong><p id="vibe-description">Warm light. Long conversations.</p></div></div>
+          <div class="vibe-options" role="group" aria-label="Website ambient lighting">
+            <button class="vibe-option" type="button" data-vibe="candlelight" aria-pressed="true"><i class="swatch" style="background:#d4c39a"></i>Candlelight</button>
+            <button class="vibe-option" type="button" data-vibe="lounge" aria-pressed="false"><i class="swatch" style="background:#c5b6ee"></i>Moody Lounge</button>
+            <button class="vibe-option" type="button" data-vibe="neon" aria-pressed="false"><i class="swatch" style="background:#bbf286"></i>Neon Bistro</button>
+          </div>
+        </article>
+
+        <!-- Bounded kitchen simulation: three rows, one timer, visible pause control. -->
+        <article class="card kitchen-card backdrop-blur-md">
+          <div class="card-top" style="margin-bottom:18px"><span class="eyebrow muted">Behind the pass</span><span class="card-number">04 <svg class="arrow" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 11 11 3M3 3h8v8"/></svg></span></div>
+          <div class="kitchen-heading"><h3>A beautiful kind of busy.</h3><div class="kitchen-toolbar"><button id="pause-kitchen" type="button" class="icon-button" aria-pressed="false">Pause</button><button id="add-order" type="button" class="icon-button">+ Order</button></div></div>
+          <div id="orders" class="orders" role="list" aria-label="Simulated kitchen orders"></div>
+          <div class="service-art" aria-hidden="true">
+            <div><p>The art of perfect timing.</p><span>From the pass to the first bite</span></div>
+            <svg viewBox="0 0 140 80">
+              <defs><linearGradient id="cloche-shine"><stop stop-color="currentColor" stop-opacity=".02"/><stop offset=".5" stop-color="currentColor" stop-opacity=".2"/><stop offset="1" stop-color="currentColor" stop-opacity=".04"/></linearGradient></defs>
+              <path d="M21 61a49 49 0 0 1 98 0z" fill="url(#cloche-shine)" stroke="currentColor" stroke-opacity=".65"/>
+              <path d="M13 63h114l-7 7H20zM63 12h14m-7 0v-6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M37 48q5-18 21-24" fill="none" stroke="currentColor" stroke-opacity=".5" stroke-linecap="round"/>
+              <path d="m113 13 3-8 3 8 8 3-8 3-3 8-3-8-8-3z" fill="currentColor" opacity=".7"/>
+            </svg>
+          </div>
+          <div class="card-foot"><span style="display:flex;align-items:center;gap:7px"><i id="kitchen-dot" class="dot live-dot"></i><span id="kitchen-status">Live simulation · updates every 5s</span></span><span id="served-count">0 served</span></div>
+        </article>
+      </div>
+    </section>
+
+    <section id="approach" class="shell philosophy" aria-labelledby="approach-title">
+      <span class="eyebrow accent">A little food for thought</span>
+      <div><h2 id="approach-title">Hospitality starts long before<br>the first <em class="accent">“welcome.”</em></h2><p>Your restaurant has a feeling. A rhythm. A reason people return. We translate that into thoughtful digital experiences—from the first curious tap to the next fully booked evening.</p><div class="principles"><span>01 / Appetite by design</span><span>02 / Frictionless by nature</span><span>03 / Human, always</span></div></div>
+    </section>
+
+    <section id="studio" class="shell contact" aria-labelledby="studio-title">
+      <div><span class="eyebrow accent">Let’s make something worth returning to</span><h2 id="studio-title">Your next<br><em>signature experience.</em></h2><p>Start with a little context. Create a project brief to share with your creative team. It downloads to your device; nothing is submitted.</p></div>
+      <form id="brief-form" class="brief-form">
+        <label>Restaurant name<input name="restaurant" autocomplete="organization" required maxlength="120" placeholder="Something exceptional"></label>
+        <label>What would you like to transform?<textarea name="vision" required maxlength="2000" placeholder="The menu, the booking journey, the whole feeling…"></textarea></label>
+        <button class="primary" type="submit">Download your brief <span aria-hidden="true"><svg class="arrow" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 11 11 3M3 3h8v8"/></svg></span></button>
+      </form>
+    </section>
+  </main>
+
+  <footer class="shell footer"><a class="wordmark" style="font-size:28px" href="#home">MELOCE</a><span>Digitalizing & transforming premium restaurants.</span><span>© <span id="year">2026</span> MELOCE · Concept studio</span><a href="#home">Back to top ↑</a></footer>
+
+  <div id="preview" class="preview" aria-hidden="true"><svg viewBox="0 0 400 400"><use id="preview-art" href="#dish-pasta"/></svg><p id="preview-name"></p></div>
+  <dialog id="dish-dialog" aria-labelledby="dish-title" aria-describedby="dish-description">
+    <button id="close-dialog" type="button" class="modal-close" aria-label="Close dish details" autofocus>×</button>
+    <div class="modal-art"><svg role="img" aria-label="Illustration of the selected dish" viewBox="0 0 400 400"><use id="modal-art" href="#dish-pasta"/></svg></div>
+    <div class="modal-content"><span class="eyebrow accent">Maison / The seasonal edit</span><h2 id="dish-title"></h2><p id="dish-description"></p><ul id="dish-ingredients" class="ingredient-list" aria-label="Ingredients"></ul><p id="dish-allergens"></p><div class="card-foot"><span>Illustrative menu · prices in USD</span><strong id="dish-price" class="accent"></strong></div></div>
+  </dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <noscript><p class="shell" style="padding:24px;color:#d4c39a">Enable JavaScript for the menu details, reservation simulator, lighting controls, and project brief download.</p></noscript>
+
+  <script>
+    (() => {
+      'use strict';
+      const $ = (selector, parent = document) => parent.querySelector(selector);
+      const $$ = (selector, parent = document) => [...parent.querySelectorAll(selector)];
+      const motion = matchMedia('(prefers-reduced-motion: reduce)');
+      const finePointer = matchMedia('(hover: hover) and (pointer: fine)');
+      let toastTimer;
+      function notify(message) {
+        const toast = $('#toast');
+        clearTimeout(toastTimer);
+        toast.textContent = message;
+        toast.classList.add('show');
+        toastTimer = setTimeout(() => toast.classList.remove('show'), 3500);
+      }
+
+      // Track navigation geometry without rebuilding links or interrupting focus.
+      const nav = $('.nav'), pill = $('.nav-pill'), links = $$('.nav a');
+      let activeLink = links[0];
+      function movePill(link) {
+        pill.style.width = `${link.offsetWidth}px`;
+        pill.style.transform = `translateX(${link.offsetLeft}px)`;
+      }
+      function selectLink(link) {
+        activeLink = link;
+        links.forEach(item => item === link ? item.setAttribute('aria-current', 'location') : item.removeAttribute('aria-current'));
+        movePill(link);
+      }
+      links.forEach(link => {
+        link.addEventListener('pointerenter', () => movePill(link));
+        link.addEventListener('focus', () => movePill(link));
+        link.addEventListener('click', () => selectLink(link));
+      });
+      nav.addEventListener('pointerleave', () => movePill(nav.contains(document.activeElement) ? document.activeElement : activeLink));
+      nav.addEventListener('focusout', () => requestAnimationFrame(() => {
+        if (!nav.contains(document.activeElement)) movePill(activeLink);
+      }));
+      let scrollFrame = 0;
+      function trackSection() {
+        scrollFrame = 0;
+        let current = links[0];
+        for (const link of links) {
+          if ($(link.hash).getBoundingClientRect().top <= innerHeight * .45) current = link;
+        }
+        if (current !== activeLink) selectLink(current);
+      }
+      addEventListener('scroll', () => {
+        if (!scrollFrame) scrollFrame = requestAnimationFrame(trackSection);
+      }, {passive:true});
+      addEventListener('resize', () => movePill(activeLink));
+      if (document.fonts) document.fonts.ready.then(() => movePill(activeLink));
+      movePill(activeLink);
+      trackSection();
+
+      // A semantic switch preserves the exact headline while changing typography.
+      $('#style-switch').addEventListener('click', event => {
+        const fine = event.currentTarget.getAttribute('aria-checked') !== 'true';
+        event.currentTarget.setAttribute('aria-checked', String(fine));
+        document.body.classList.toggle('fast', !fine);
+      });
+
+      // Dish data is shared by cursor previews and the accessible native dialog.
+      const dishes = {
+        pasta:{name:'Truffle tagliolini',price:'$38',description:'Hand-cut ribbons folded through a silky parmesan emulsion, finished with shaved black truffle. Comfort, dressed for the evening.',ingredients:['Fresh egg pasta','Black truffle','24-month parmesan','Cultured butter','Fresh herbs'],allergens:'Contains wheat, egg, and milk.'},
+        burrata:{name:'Heirloom burrata',price:'$24',description:'Cool, creamy burrata meets sun-ripened tomatoes and a generous pour of basil oil. A small celebration of the season.',ingredients:['Burrata','Heirloom tomatoes','Basil oil','Sourdough crumbs','Sea salt'],allergens:'Contains milk and wheat.'},
+        fish:{name:'Miso-glazed cod',price:'$42',description:'Delicate cod with a burnished white-miso glaze, spring asparagus, and a bright finish of citrus.',ingredients:['Cod','White miso','Spring asparagus','Lemon','Mirin'],allergens:'Contains fish and soy.'},
+        dessert:{name:'Chocolate crémeux',price:'$18',description:'Deep, dark cacao with vanilla-bean cream, tart berries, and just enough sea salt to keep you thinking about the next spoonful.',ingredients:['70% dark chocolate','Vanilla cream','Raspberries','Butter','Sea salt'],allergens:'Contains milk and egg.'}
+      };
+      const preview = $('#preview'), dialog = $('#dish-dialog');
+      let lastDishButton;
+      function hidePreview() { preview.classList.remove('visible'); }
+      function placePreview(event) {
+        const bounds = preview.getBoundingClientRect();
+        let x = event.clientX + 22, y = event.clientY - bounds.height / 2;
+        if (x + bounds.width > innerWidth - 12) x = event.clientX - bounds.width - 22;
+        x = Math.max(12, Math.min(x, innerWidth - bounds.width - 12));
+        y = Math.max(12, Math.min(y, innerHeight - bounds.height - 12));
+        preview.style.transform = `translate3d(${x}px,${y}px,0)`;
+      }
+      $$('.dish').forEach(button => {
+        const key = button.dataset.dish, dish = dishes[key];
+        function showPreview(event) {
+          if (!finePointer.matches || event.pointerType === 'touch' || dialog.open) return;
+          $('#preview-art').setAttribute('href', `#dish-${key}`);
+          $('#preview-name').textContent = dish.name;
+          placePreview(event);
+          preview.classList.add('visible');
+        }
+        button.addEventListener('pointerenter', showPreview);
+        button.addEventListener('pointermove', showPreview);
+        button.addEventListener('pointerleave', hidePreview);
+        button.addEventListener('click', () => {
+          hidePreview();
+          lastDishButton = button;
+          $('#modal-art').setAttribute('href', `#dish-${key}`);
+          $('#dish-title').textContent = dish.name;
+          $('#dish-description').textContent = dish.description;
+          $('#dish-price').textContent = dish.price;
+          $('#dish-allergens').textContent = dish.allergens;
+          $('#dish-ingredients').replaceChildren(...dish.ingredients.map(ingredient => {
+            const li = document.createElement('li');
+            li.textContent = ingredient;
+            return li;
+          }));
+          dialog.showModal();
+          document.body.style.overflow = 'hidden';
+        });
+      });
+      $('#close-dialog').addEventListener('click', () => dialog.close());
+      // Close only when both pointer-down and pointer-up land on the backdrop.
+      let backdropDown = false;
+      function outsideDialog(event) {
+        const r = dialog.getBoundingClientRect();
+        return event.clientX < r.left || event.clientX > r.right || event.clientY < r.top || event.clientY > r.bottom;
+      }
+      dialog.addEventListener('pointerdown', event => { backdropDown = outsideDialog(event); });
+      dialog.addEventListener('click', event => { if (backdropDown && outsideDialog(event)) dialog.close(); backdropDown = false; });
+      dialog.addEventListener('close', () => {
+        document.body.style.overflow = '';
+        lastDishButton?.focus({preventScroll:true});
+      });
+      addEventListener('scroll', hidePreview, {passive:true});
+      addEventListener('blur', hidePreview);
+
+      // Opt-in audio is synthesized locally; browsers never receive autoplay requests.
+      let sound = false, audio;
+      const soundButton = $('#sound-toggle');
+      soundButton.addEventListener('click', () => {
+        sound = !sound;
+        soundButton.setAttribute('aria-pressed', String(sound));
+        soundButton.textContent = sound ? 'Sound on' : 'Sound off';
+        if (sound) clickSound();
+      });
+      async function clickSound() {
+        if (!sound) return;
+        try {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (!AudioContext) throw new Error('Audio unavailable');
+          audio ||= new AudioContext();
+          if (audio.state === 'suspended') await audio.resume();
+          const oscillator = audio.createOscillator(), gain = audio.createGain(), now = audio.currentTime;
+          oscillator.type = 'sine';
+          oscillator.frequency.setValueAtTime(680, now);
+          oscillator.frequency.exponentialRampToValueAtTime(320, now + .07);
+          gain.gain.setValueAtTime(.035, now);
+          gain.gain.exponentialRampToValueAtTime(.001, now + .09);
+          oscillator.connect(gain); gain.connect(audio.destination);
+          oscillator.start(now); oscillator.stop(now + .1);
+          oscillator.onended = () => { oscillator.disconnect(); gain.disconnect(); };
+        } catch {
+          sound = false;
+          soundButton.setAttribute('aria-pressed', 'false');
+          soundButton.textContent = 'Sound off';
+          notify('Audio is unavailable in this browser. Visual feedback is still active.');
+        }
+      }
+
+      // One active reservation per visitor; selecting again releases it.
+      const tableButtons = $$('[data-table]');
+      tableButtons.forEach(button => button.addEventListener('click', () => {
+        const reserve = button.getAttribute('aria-pressed') !== 'true';
+        tableButtons.forEach(table => {
+          const selected = table === button && reserve;
+          table.setAttribute('aria-pressed', String(selected));
+          table.setAttribute('aria-label', `${selected ? 'Release' : 'Reserve'} table ${table.dataset.table}`);
+        });
+        $('#seat-status').textContent = reserve ? `Table ${button.dataset.table} reserved for you · demo` : 'Table released. Choose another spot.';
+        clickSound();
+        if (!motion.matches && button.animate) button.animate([{transform:'scale(1)'},{transform:'scale(.92)'},{transform:'scale(1)'}],{duration:300,easing:'ease-out'});
+      }));
+      $('#reset-tables').addEventListener('click', () => {
+        tableButtons.forEach(table => {
+          table.setAttribute('aria-pressed', 'false');
+          table.setAttribute('aria-label', `Reserve table ${table.dataset.table}`);
+        });
+        $('#seat-status').textContent = 'Selection reset. Your next evening awaits.';
+      });
+
+      // Storage access is optional: file:// and privacy modes can deny it.
+      const vibes = {
+        candlelight:['A candlelit affair.','Warm light. Long conversations.'],
+        lounge:['Stay a little longer.','Velvet tones. A slower tempo.'],
+        neon:['A different kind of energy.','Bright ideas. Late-night appetites.']
+      };
+      function setVibe(vibe, save = true) {
+        if (!Object.hasOwn(vibes, vibe)) return;
+        document.documentElement.dataset.vibe = vibe;
+        $('#vibe-title').textContent = vibes[vibe][0];
+        $('#vibe-description').textContent = vibes[vibe][1];
+        $$('.vibe-option').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.vibe === vibe)));
+        if (save) { try { localStorage.setItem('meloce-vibe', vibe); } catch {} }
+      }
+      $$('.vibe-option').forEach(button => button.addEventListener('click', () => setVibe(button.dataset.vibe)));
+      try { setVibe(localStorage.getItem('meloce-vibe') || 'candlelight', false); } catch {}
+
+      // Deterministic order lifecycle: preparing → plating → served → next ticket.
+      // Automatic changes are not live-announced, avoiding repeated screen-reader interruptions.
+      const kitchenDishes = ['Truffle tagliolini','Heirloom burrata','Miso-glazed cod','Chocolate crémeux'];
+      const states = ['Preparing','Plating','Served'];
+      let serial = 1086, served = 0, tick = 0, timer = null, paused = motion.matches;
+      let orders = [
+        {id:1083,name:kitchenDishes[0],state:0},
+        {id:1084,name:kitchenDishes[2],state:1},
+        {id:1085,name:kitchenDishes[1],state:0}
+      ];
+      function newOrder() { const id = serial++; return {id,name:kitchenDishes[id % kitchenDishes.length],state:0}; }
+      function renderOrders() {
+        $('#orders').replaceChildren(...orders.map(order => {
+          const row = document.createElement('div');
+          row.className = 'order'; row.setAttribute('role', 'listitem');
+          const id = document.createElement('span'), name = document.createElement('span'), state = document.createElement('span');
+          id.className = 'order-id'; id.textContent = `#${order.id}`;
+          name.textContent = order.name;
+          state.className = `order-state state-${order.state}`; state.textContent = states[order.state];
+          row.append(id, name, state);
+          return row;
+        }));
+        $('#served-count').textContent = `${served} served`;
+      }
+      function advanceKitchen() {
+        const index = tick++ % orders.length, order = orders[index];
+        if (order.state === 2) orders[index] = newOrder();
+        else { order.state++; if (order.state === 2) served++; }
+        renderOrders();
+      }
+      function syncKitchen() {
+        clearInterval(timer);
+        timer = null;
+        if (!paused && !document.hidden) timer = setInterval(advanceKitchen, 5000);
+        $('#pause-kitchen').textContent = paused ? 'Resume' : 'Pause';
+        $('#pause-kitchen').setAttribute('aria-pressed', String(paused));
+        $('#kitchen-status').textContent = paused ? 'Simulation paused' : 'Live simulation · updates every 5s';
+        $('#kitchen-dot').classList.toggle('live-dot', !paused);
+      }
+      $('#pause-kitchen').addEventListener('click', () => { paused = !paused; syncKitchen(); });
+      $('#add-order').addEventListener('click', () => {
+        const order = newOrder();
+        orders = [order, ...orders].slice(0, 3);
+        renderOrders();
+        notify(`Demo order #${order.id} added: ${order.name}.`);
+      });
+      document.addEventListener('visibilitychange', syncKitchen);
+      motion.addEventListener('change', event => { if (event.matches) { paused = true; syncKitchen(); } });
+      renderOrders();
+      syncKitchen();
+
+      // Download plain text locally; form input never enters HTML or a network request.
+      $('#brief-form').addEventListener('submit', event => {
+        event.preventDefault();
+        const form = event.currentTarget;
+        const restaurant = form.elements.restaurant.value.trim(), vision = form.elements.vision.value.trim();
+        if (!restaurant || !vision) { notify('Please add a restaurant name and a short project vision.'); return; }
+        const content = `MELOCE — RESTAURANT PROJECT BRIEF\n\nRestaurant: ${restaurant}\n\nThe vision\n${vision}\n\nAreas to explore\n• Brand and digital identity\n• Interactive menu experience\n• Reservation journey\n• Guest communication and kitchen operations\n\nNext step: share this brief with your creative team.\n`;
+        const url = URL.createObjectURL(new Blob([content], {type:'text/plain;charset=utf-8'}));
+        const link = document.createElement('a');
+        link.href = url; link.download = 'meloce-project-brief.txt';
+        document.body.append(link); link.click(); link.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 30000);
+        notify('Your brief is ready to download. Nothing was submitted.');
+      });
+      $('#year').textContent = new Date().getFullYear();
+    })();
+  </script>
+</body>
+</html>
