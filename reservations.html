@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" class="reservation-page-root">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#086371">
+  <meta name="description" content="View, edit, and cancel your locally saved Bae Sik Dang demo reservations.">
+  <meta name="robots" content="noindex">
+  <title>Your reservations — Bae Sik Dang 배식당</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="reservations.css">
+  <script src="reservation-store.js" defer></script>
+  <script src="reservation-ui.js" defer></script>
+</head>
+<body class="reservation-page">
+  <a class="skip" href="#main">Skip to reservations</a>
+  <header class="manager-header"><div class="shell"><a href="index.html" class="manager-brand" aria-label="Bae Sik Dang home"><span lang="ko">배식당</span><small>BAE SIK DANG</small></a><a class="back-link" href="index.html#booking">Back to the restaurant →</a></div></header>
+  <main id="main" class="shell manager-main">
+    <div class="manager-intro"><div><span class="korean" lang="ko">예약 확인</span><h1 id="manager-heading">Your reservation board.</h1><p id="manager-intro">Find the evening you have planned, make a little change, or cancel a reservation. Your demo bookings are kept on this device.</p></div><a class="btn" href="index.html#booking">Make a reservation <svg class="arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10h14m-6-6 6 6-6 6"/></svg></a></div>
+    <section id="reservation-manager" class="paper manager-board" aria-label="Saved reservations">
+      <div class="manager-toolbar"><div class="manager-tabs" role="group" aria-label="Filter reservations"><button class="manager-tab" data-filter="confirmed" aria-pressed="true" type="button">Upcoming & saved</button><button class="manager-tab" data-filter="cancelled" aria-pressed="false" type="button">Cancelled</button><button class="manager-tab" data-filter="all" aria-pressed="false" type="button">All</button></div><span id="manager-count" class="manager-count" role="status" aria-live="polite"></span></div>
+      <p id="manager-message" class="reservation-message" role="status" aria-live="polite"></p>
+      <p id="manager-error" class="manager-error" role="alert" hidden></p>
+      <div id="reservation-list" class="reservation-list"></div>
+      <div id="manager-empty" class="manager-empty" hidden><span class="korean" lang="ko">같이 앉아요</span><h2 id="empty-title">Your next evening starts here.</h2><p id="empty-copy">There are no saved reservations in this browser yet. Choose a date, a room, and your favorite seats to create a demo reservation.</p><a class="btn btn-outline" href="index.html#booking">Choose a table</a></div>
+      <p class="manager-note">Local demo only. These reservations are not sent to Bae Sik Dang. Cancelling releases the selected seats in this browser; editing updates the same reservation. A different device or browser will have its own reservation list.</p>
+      <noscript><p class="manager-error">Enable JavaScript to view, edit, or cancel your locally saved reservations.</p></noscript>
+    </section>
+  </main>
+  <footer class="footer"><div class="shell"><div class="footer-main"><a class="footer-brand" href="index.html"><span lang="ko" style="font:inherit;margin:0;letter-spacing:0">배식당</span><span>BAE SIK DANG</span></a><p>A little change of plans. Still plenty of good food.</p><a class="manage-link" style="color:inherit" href="index.html#faq">Booking questions?</a></div><div class="footer-bottom"><span>Bae Sik Dang · Reservation preview</span><span>All times: Asia/Singapore</span></div></div></footer>
+  <dialog id="cancel-dialog" aria-labelledby="cancel-heading" aria-describedby="cancel-description"><span class="eyebrow red">CHANGE OF PLANS?</span><h2 id="cancel-heading">Cancel this reservation?</h2><p id="cancel-description">This releases the seats for this demo reservation. Your other reservations will stay as they are.</p><p id="cancel-details" class="cancel-details"></p><p id="cancel-error" class="manager-error" role="alert" hidden></p><div class="dialog-actions"><button id="keep-reservation" class="btn btn-outline" type="button" autofocus>Keep reservation</button><button id="confirm-cancel" class="btn btn-red" type="button">Cancel this reservation</button></div></dialog>
+</body>
+</html>

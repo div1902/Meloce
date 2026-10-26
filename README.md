@@ -1,39 +1,49 @@
 # Bae Sik Dang / 배식당
 
-A single-file retro Korean BBQ restaurant website preview. The design combines
-Bae Sik Dang's Korean and English name, a teal storefront sign, golden
-brickwork, aged cream posters, and red lettering.
+A retro Korean BBQ restaurant website preview, with a teal storefront sign,
+golden brickwork, aged cream posters, and red Korean and English lettering.
 
-Open `index.html` in a modern browser, or serve this directory with
-`python3 -m http.server 8000`. Tailwind and optional Google Fonts use external
-CDNs. The generated BBQ photograph, textures, display fonts, core CSS, and
-interactions are embedded in the HTML. Font license notices are included.
-The core experience works even when external CDNs are unavailable.
+Serve this directory with `python3 -m http.server 8000` and open `index.html`.
+The restaurant page uses Tailwind and optional Google Fonts from CDNs. Core
+styles, display fonts, textures, and the generated BBQ image are bundled.
+`styles.css` includes the display-font licenses. Both pages work without the
+external CDNs. Use the same HTTP origin to share saved reservations between pages.
 
-## Features
+## Reservations
 
-- Menu details with illustrative ingredients, allergens, and prices.
-- A local table-picker demo that filters seats by party size.
-- Ambient lighting preferences and a pausable kitchen simulation.
-- A themed FAQ board with six seeded demo answers, search, and category filters.
-- Questions matched to existing FAQ answers, with up to eight recent questions.
-- Questions without a match remain unsent and can be downloaded as a text file.
-- Reversible helpful/not-helpful votes, with one local selection per answer.
+- Choose a date from today through seven days ahead, inclusive, in Singapore time.
+- Dinner slots are 18:00, 19:30, and 21:00. Past slots cannot be saved.
+- Private Room, Main Lobby, and Room 3 currently use identical layouts: two
+  six-seat tables and two four-seat tables, for 20 seats per room.
+- Select whole tables or individual seats across multiple tables. One reservation
+  covers one room, date, and time. Each room and time has separate availability.
+- `reservations.html` lists locally saved bookings. Edit links reopen the planner
+  with the original selection. Saving updates that same record.
+- Cancellation asks which specific booking to cancel, confirms the action, and
+  releases its seats. Cancelled records remain viewable in a separate tab.
+- `reservation-store.js` validates dates, seats, availability, and record revisions
+  on every write. Web Locks serialize writes between tabs where available.
+- `reservation-ui.js` renders the accessible 3D-style tables and management board.
+- Reservations use browser storage only. Blocked storage prevents saving, with a
+  visible error. No reservation, cancellation, or change is sent to the restaurant.
 
-FAQ history and feedback are stored only in the visitor's browser. Visitors can
-clear their history, change a vote, or remove it by selecting it again. When
-storage is unavailable, interactions remain usable for the current tab session.
-There are no aggregate visitor counts or staff replies, and nothing is submitted
-to the restaurant. Demo answers must be reviewed and replaced with confirmed
-restaurant policies before a real booking service is connected.
+## Menu, FAQ, and other interactions
 
-Bookings, menu prices, and kitchen updates are demonstrations. Reduced-motion
-preferences pause the animated kitchen by default.
+The menu includes illustrative ingredients, allergens, and prices. Lighting
+preferences and a pausable kitchen simulation complete the restaurant preview.
+Reduced-motion preferences pause continuous animations by default.
+
+The FAQ has seven demo answers, search, category filters, question matching,
+recent-question history, and reversible helpful/not-helpful votes. Questions
+without a match remain unsent and can be downloaded as text. FAQ history and
+feedback are local to the visitor's browser, with an in-memory fallback when
+storage is unavailable. There are no aggregate visitor counts or staff replies.
+
+Demo information must be replaced with confirmed restaurant policies before
+connecting any real booking or messaging service.
 
 ## Vercel
 
 Use `main` as the production branch and the repository root (`.`) as the Root
-Directory. `vercel.json` configures a static deployment without an install or
-build step and uses `.` as the output directory.
-
-The homepage is served from `index.html`. `/portfolio.html` redirects to `/`.
+Directory. `vercel.json` configures static hosting without install or build steps.
+`index.html` is the homepage. `/portfolio.html` redirects to `/`.
