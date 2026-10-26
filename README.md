@@ -1,27 +1,39 @@
-# MELOCE
+# Bae Sik Dang / 배식당
 
-A single-file retro Korean BBQ restaurant concept, branded MELOCE / 메로체.
-The design combines a teal storefront sign, textured golden brickwork,
-aged cream menu posters, and red Korean and English lettering.
+A single-file retro Korean BBQ restaurant website preview. The design combines
+Bae Sik Dang's Korean and English name, a teal storefront sign, golden
+brickwork, aged cream posters, and red lettering.
 
 Open `index.html` in a modern browser, or serve this directory with
-`python3 -m http.server 8000`. Tailwind and Google Fonts use external CDNs;
-the generated BBQ photograph, SVG artwork, textures, display fonts, core styles,
-and interactions are embedded in the HTML. Embedded font license notices are
-included at the end of the file. The core experience also works if
-external CDNs are unavailable, using local font fallbacks.
+`python3 -m http.server 8000`. Tailwind and optional Google Fonts use external
+CDNs. The generated BBQ photograph, textures, display fonts, core CSS, and
+interactions are embedded in the HTML. Font license notices are included.
+The core experience works even when external CDNs are unavailable.
+
+## Features
+
+- Menu details with illustrative ingredients, allergens, and prices.
+- A local table-picker demo that filters seats by party size.
+- Ambient lighting preferences and a pausable kitchen simulation.
+- A themed FAQ board with six seeded demo answers, search, and category filters.
+- Questions matched to existing FAQ answers, with up to eight recent questions.
+- Questions without a match remain unsent and can be downloaded as a text file.
+- Reversible helpful/not-helpful votes, with one local selection per answer.
+
+FAQ history and feedback are stored only in the visitor's browser. Visitors can
+clear their history, change a vote, or remove it by selecting it again. When
+storage is unavailable, interactions remain usable for the current tab session.
+There are no aggregate visitor counts or staff replies, and nothing is submitted
+to the restaurant. Demo answers must be reviewed and replaced with confirmed
+restaurant policies before a real booking service is connected.
+
+Bookings, menu prices, and kitchen updates are demonstrations. Reduced-motion
+preferences pause the animated kitchen by default.
 
 ## Vercel
 
-Import this repository using `main` as the production branch and the repository
-root (`.`) as the Root Directory. `vercel.json` configures a static deployment
-with no install or build step and `.` as the output directory.
+Use `main` as the production branch and the repository root (`.`) as the Root
+Directory. `vercel.json` configures a static deployment without an install or
+build step and uses `.` as the output directory.
 
-The homepage is served from `index.html`. The former `/portfolio.html` URL
-redirects to `/`.
-
-The menu includes ingredient and allergen dialogs. The table picker filters
-seats by party size, and the lighting controls retain a local visual preference.
-The table bookings and kitchen orders are local demonstrations, not backend
-services. Prices and menu information are illustrative; no real reservation is
-submitted. Reduced-motion preferences pause the animated kitchen by default.
+The homepage is served from `index.html`. `/portfolio.html` redirects to `/`.
