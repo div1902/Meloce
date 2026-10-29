@@ -118,7 +118,6 @@
         </article>
         <div class="side-stack">
           <article class="jukebox"><div class="card-heading"><div><span class="korean" lang="ko">분위기 좋다</span><h3>A little mood music.</h3></div><span class="index" aria-hidden="true">03</span></div><div class="mood-main"><div class="vinyl" aria-hidden="true"></div><div><strong id="mood-title">The golden hour.</strong><p id="mood-description">Warm lights. One more round.</p></div></div><div class="mood-options" role="group" aria-label="Restaurant ambient lighting"><button type="button" class="mood-option" data-mood="lunch" aria-pressed="false">Lunch glow</button><button type="button" class="mood-option" data-mood="golden" aria-pressed="true">Golden hour</button><button type="button" class="mood-option" data-mood="night" aria-pressed="false">After hours</button></div><p class="mood-note">Pick the light, set the feeling. No audio plays automatically.</p></article>
-          <article class="paper kitchen"><div class="kitchen-top"><span class="eyebrow">주방 / From the kitchen</span><div class="controls-small"><button id="pause-kitchen" class="mini-btn" type="button" aria-pressed="false">Pause</button><button id="add-order" class="mini-btn" type="button">+ Order</button></div></div><div class="card-heading"><h3>Good things are sizzling.</h3><span class="index" aria-hidden="true">04</span></div><div id="orders" class="orders" role="list" aria-label="Simulated kitchen orders"></div><div class="kitchen-foot"><span><i id="kitchen-dot" class="status-dot live-dot" aria-hidden="true"></i><span id="kitchen-status">Live demo · every 5s</span></span><span id="served-count">0 served</span></div></article>
         </div>
       </div>
     </section>
@@ -193,7 +192,7 @@
   <div id="preview" class="preview" aria-hidden="true"><img id="preview-photo" alt=""><p id="preview-name"></p></div>
   <dialog id="dish-dialog" aria-labelledby="dish-title" aria-describedby="dish-description"><button id="close-dialog" class="modal-close" type="button" aria-label="Close dish details" autofocus>×</button><div class="modal-photo"><img id="modal-photo" alt="Korean barbecue sharing spread"></div><div class="modal-content"><span id="dish-korean" class="korean" lang="ko"></span><h2 id="dish-title"></h2><p id="dish-description"></p><ul id="dish-ingredients" class="ingredients" aria-label="Ingredients"></ul><p id="dish-allergens"></p><div class="modal-foot"><span>Illustrative menu · serving suggestion · SGD</span><strong id="dish-price"></strong></div></div></dialog>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
-  <noscript><p class="shell" style="padding:20px;background:var(--paper)">The menu is available above. The answered FAQ questions also work without JavaScript. Enable JavaScript for dish details, the booking demo, FAQ search, asking questions, feedback, lighting controls, and kitchen updates.</p></noscript>
+  <noscript><p class="shell" style="padding:20px;background:var(--paper)">The menu is available above. The answered FAQ questions also work without JavaScript. Enable JavaScript for dish details, the booking demo, FAQ search, asking questions, feedback, and lighting controls.</p></noscript>
 
   <script>
     (() => {
@@ -255,15 +254,6 @@
       function setMood(key,save=true){if(!Object.hasOwn(moods,key))return;document.documentElement.dataset.mood=key;$('#mood-title').textContent=moods[key][0];$('#mood-description').textContent=moods[key][1];$$('.mood-option').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.mood===key)));if(save){try{localStorage.setItem('bae-sik-dang-retro-mood',key);}catch{}}}
       $$('.mood-option').forEach(button=>button.addEventListener('click',()=>setMood(button.dataset.mood)));try{setMood(localStorage.getItem('bae-sik-dang-retro-mood')||'golden',false);}catch{}
 
-      // A bounded kitchen simulation: one timer, three tickets, and a visible pause button.
-      const names=['Pork belly','Marinated galbi','Kimchi jjigae','Banchan spread'],states=['Prepping','On the grill','Served'];
-      let serial=1086,served=0,tick=0,timer=null,paused=motion.matches;
-      let orders=[{id:1083,name:names[0],stage:0},{id:1084,name:names[1],stage:1},{id:1085,name:names[3],stage:0}];
-      function newOrder(){const id=serial++;return{id,name:names[id%names.length],stage:0};}
-      function renderOrders(){$('#orders').replaceChildren(...orders.map(order=>{const row=document.createElement('div');row.className='order';row.setAttribute('role','listitem');const id=document.createElement('span'),name=document.createElement('span'),state=document.createElement('span');id.className='order-id';id.textContent=`#${order.id}`;name.textContent=order.name;state.className=`order-state state-${order.stage}`;state.textContent=order.stage===1&&['Banchan spread','Kimchi jjigae'].includes(order.name)?'Plating':states[order.stage];row.append(id,name,state);return row;}));$('#served-count').textContent=`${served} served`;}
-      function advance(){const index=tick++%orders.length;if(orders[index].stage===2)orders[index]=newOrder();else{orders[index].stage++;if(orders[index].stage===2)served++;}renderOrders();}
-      function syncKitchen(){clearInterval(timer);timer=null;if(!paused&&!document.hidden)timer=setInterval(advance,5000);$('#pause-kitchen').textContent=paused?'Resume':'Pause';$('#pause-kitchen').setAttribute('aria-pressed',String(paused));$('#kitchen-status').textContent=paused?'Demo paused':'Live demo · every 5s';$('#kitchen-dot').classList.toggle('live-dot',!paused);}
-      $('#pause-kitchen').addEventListener('click',()=>{paused=!paused;syncKitchen();});$('#add-order').addEventListener('click',()=>{const order=newOrder();orders=[order,...orders].slice(0,3);renderOrders();notify(`Demo order #${order.id} added: ${order.name}.`);});document.addEventListener('visibilitychange',syncKitchen);motion.addEventListener('change',event=>{if(event.matches){paused=true;syncKitchen();}});renderOrders();syncKitchen();
       // FAQ data is read from the static, accessible answers above. No remote service is called.
       const normalizeQuestion=text=>text.normalize('NFKC').toLowerCase().replace(/[^\p{L}\p{N}]+/gu,' ').trim();
       const faqItems=$$('.faq-item').map(element=>({

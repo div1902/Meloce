@@ -33,7 +33,7 @@ external CDNs. Use the same HTTP origin to share saved reservations between page
 ## Menu, FAQ, and other interactions
 
 The menu includes illustrative ingredients, allergens, and prices. Lighting
-preferences and a pausable kitchen simulation complete the restaurant preview.
+preferences complete the restaurant preview.
 Reduced-motion preferences pause continuous animations by default.
 
 The FAQ has seven demo answers, search, category filters, question matching,
