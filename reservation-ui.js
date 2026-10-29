@@ -26,8 +26,8 @@
       $('#editing-banner').hidden=false;
       try{
         const record=Store.read().find(item=>item.id===editId);
-        if(!record||record.status!=='confirmed')throw new Error('This reservation is missing or cancelled. Return to your reservations to choose another one.');
-        expectedRevision=record.revision;date.value=record.date;time.value=record.time;room.value=record.room;selected=new Set(record.seats);
+        if(!record||record.status==='cancelled')throw new Error('This reservation is missing or cancelled. Return to your reservations to choose another one.');
+        expectedRevision=record.revision;$('#booking-guest-name').value=record.guest?.name||'';$('#booking-guest-phone').value=record.guest?.phone||'';$('#booking-guest-note').value=record.guest?.note||'';date.value=record.date;time.value=record.time;room.value=record.room;selected=new Set(record.seats);
         $('#editing-reference').textContent=record.id+' · your original booking stays unchanged until you save.';
         $('#planner-heading').textContent='A little change of plans.';
       }catch(error){invalidEdit=true;$('#editing-reference').textContent='Unable to open this reservation.';tell(error.message,true);}
@@ -95,14 +95,15 @@
     $('#clear-selection').addEventListener('click',()=>{selected.clear();tell('Seat selection cleared.');render();});
     form.addEventListener('submit',async event=>{
       event.preventDefault();if(saving||invalidEdit)return;
-      const input={...slot(),seats:[...selected]},wasEdit=Boolean(editId);
+      const input={...slot(),seats:[...selected],guest:{name:$('#booking-guest-name').value.trim(),phone:$('#booking-guest-phone').value.trim(),note:$('#booking-guest-note').value.trim()}},wasEdit=Boolean(editId);
+      if(!input.guest.name){tell('Enter a name for this demo booking.',true);$('#booking-guest-name').focus();return;}
       saving=true;tell('');render();
       try{
         const record=await Store.save(input,editId,expectedRevision);
-        selected.clear();editId=null;expectedRevision=null;
+        selected.clear();editId=null;expectedRevision=null;['name','phone','note'].forEach(key=>$('#booking-guest-'+key).value='');
         $('#editing-banner').hidden=true;$('#planner-heading').textContent='A date. A room. Your people.';
         const url=new URL(location.href);url.searchParams.delete('edit');history.replaceState(null,'',url);
-        $('#success-title').textContent=wasEdit?'Demo reservation updated.':'Demo reservation saved.';
+        $('#success-title').textContent=wasEdit?'Changes awaiting confirmation.':'Demo booking awaiting confirmation.';
         $('#success-details').textContent=`${record.id} · ${Store.formatDate(record.date)} · ${record.time} · ${Store.roomName(record.room)} · ${record.seats.length} seats`;
         $('#success-seats').textContent=Store.seatSummary(record.seats);
         $('#success-edit').href=editURL(record.id);$('#reservation-success').hidden=false;
@@ -134,16 +135,16 @@
     function render(){
       let records;
       try{records=Store.read();$('#manager-error').hidden=true;}catch(error){$('#manager-error').textContent=error.message;$('#manager-error').hidden=false;list.replaceChildren();$('#manager-empty').hidden=true;$('#manager-count').textContent='Unable to read reservations';return;}
-      const visible=records.filter(record=>filter==='all'||record.status===filter).sort((a,b)=>`${a.date} ${a.time}`.localeCompare(`${b.date} ${b.time}`));
+      const visible=records.filter(record=>filter==='all'||(filter==='confirmed'?record.status!=='cancelled':record.status===filter)).sort((a,b)=>`${a.date} ${a.time}`.localeCompare(`${b.date} ${b.time}`));
       $('#manager-count').textContent=`${visible.length} reservation${visible.length===1?'':'s'}`;
       list.replaceChildren(...visible.map(record=>{
         const cancelled=record.status==='cancelled',ticket=make('article',`reservation-ticket${cancelled?' cancelled':''}`);ticket.dataset.reservation=record.id;
-        const top=make('div','ticket-top');top.append(make('span','ticket-reference',record.id),make('span','ticket-status',cancelled?'CANCELLED':'SAVED DEMO'));
+        const top=make('div','ticket-top');top.append(make('span','ticket-reference',record.id),make('span','ticket-status',cancelled?'CANCELLED':record.status==='pending'?'AWAITING CONFIRMATION':'CONFIRMED · DEMO'));
         const heading=make('h2','',Store.roomName(record.room));
         const when=make('p','ticket-when',`${Store.formatDate(record.date)} · ${record.time} SGT`);
         const tables=Store.TABLES.filter(table=>record.seats.some(seat=>seat.startsWith(table.id+'-'))).length;
         const count=make('p','ticket-guests',`${record.seats.length} seat${record.seats.length===1?'':'s'} · ${tables} table${tables===1?'':'s'}`);
-        const seats=make('p','ticket-seats',Store.seatSummary(record.seats));ticket.append(top,heading,when,count,seats);
+        const seats=make('p','ticket-seats',Store.seatSummary(record.seats));ticket.append(top,heading,when,count,seats);if(record.guest?.name)ticket.append(make('p','ticket-seats',`Guest: ${record.guest.name}`));
         if(!cancelled){
           const actions=make('div','ticket-actions'),edit=make('a','btn btn-outline','Edit reservation'),cancel=make('button','cancel-ticket','Cancel reservation');
           edit.href=editURL(record.id);edit.setAttribute('aria-label',`Edit reservation ${record.id}`);cancel.type='button';cancel.setAttribute('aria-label',`Cancel reservation ${record.id}`);

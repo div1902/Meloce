@@ -6,7 +6,7 @@ golden brickwork, aged cream posters, and red Korean and English lettering.
 Serve this directory with `python3 -m http.server 8000` and open `index.html`.
 The restaurant page uses Tailwind and optional Google Fonts from CDNs. Core
 styles, display fonts, textures, and the generated BBQ image are bundled.
-`styles.css` includes the display-font licenses. Both pages work without the
+`styles.css` includes the display-font licenses. All pages work without the
 external CDNs. Use the same HTTP origin to share saved reservations between pages.
 
 ## Reservations
@@ -17,6 +17,9 @@ external CDNs. Use the same HTTP origin to share saved reservations between page
   six-seat tables and two four-seat tables, for 20 seats per room.
 - Select whole tables or individual seats across multiple tables. One reservation
   covers one room, date, and time. Each room and time has separate availability.
+- Add a guest name, optional phone number, and optional special requests using
+  sample details. New customer bookings await staff confirmation; they hold their
+  selected seats. Customer edits return a booking to awaiting confirmation.
 - `reservations.html` lists locally saved bookings. Edit links reopen the planner
   with the original selection. Saving updates that same record.
 - Cancellation asks which specific booking to cancel, confirms the action, and
@@ -41,6 +44,29 @@ storage is unavailable. There are no aggregate visitor counts or staff replies.
 
 Demo information must be replaced with confirmed restaurant policies before
 connecting any real booking or messaging service.
+
+## Staff preview
+
+Open `admin.html`, or use **Staff preview** in the restaurant footer or booking
+section. This adapts the supplied staff-page files to the same retro theme.
+
+- Choose a day and dinner time to see all three rooms, available tables, guest
+  names, contact details, and clearly labelled confirmation status.
+- Open **Details** to confirm a pending request, edit the guest/date/time/room/
+  exact seats, or cancel with a confirmation step. Cancelled bookings remain in
+  the day's expandable history. Edits keep the original booking reference.
+- **New booking** walks staff through a phone/walk-in booking and saves it as
+  confirmed. Staff can use a slot already underway today. The preview uses
+  90-minute dinner slots; this is not an established restaurant policy.
+- **Load sample bookings** adds three labelled examples without replacing any
+  reservations. Clicking again does not duplicate those examples.
+- **Print this day's list** provides a simple guest list with confirmation status.
+
+This is a demo without authentication or a backend. Customer and staff pages
+share local storage only on the same browser and origin, including updates
+between tabs. A different staff device cannot receive customer bookings. No
+notifications are sent. Use sample personal details. Existing saved bookings
+remain readable; blocked storage and stale edits show errors.
 
 ## Vercel
 

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" class="admin-root">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#086371">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Staff bookings — Bae Sik Dang 배식당</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="admin.css">
+  <script src="reservation-store.js" defer></script>
+  <script src="admin.js" defer></script>
+</head>
+<body class="admin-page">
+  <a class="skip" href="#main">Skip to staff bookings</a>
+  <header class="adm-header">
+    <div class="adm-shell adm-header-row">
+      <div class="adm-brand"><span lang="ko">배식당</span><small>BAE SIK DANG · STAFF PREVIEW</small></div>
+      <div class="adm-clock" id="adm-clock" aria-live="off"></div>
+    </div>
+  </header>
+
+  <main class="adm-shell adm-main" id="main">
+    <div class="adm-intro"><div><span class="adm-kicker">THE RESERVATION COUNTER</span><h1>Good evenings start here.</h1><p>Review requests, welcome your guests, and keep every table in order.</p></div><a class="adm-link" href="index.html#booking">← Restaurant page</a></div>
+    <aside class="adm-demo"><strong>Demo counter · same browser only</strong><span>Main-page bookings appear here automatically. No login, notifications, or real restaurant reservations. Use sample guest details.</span><button id="load-samples" class="adm-link" type="button">Load sample bookings</button></aside>
+    <noscript><p class="adm-error">Enable JavaScript to use the staff preview.</p></noscript>
+    <!-- 1. Which day -->
+    <section class="adm-day" aria-label="Choose a day">
+      <button class="adm-arrow" id="day-prev" type="button" aria-label="Previous day">←</button>
+      <div class="adm-day-label">
+        <strong id="day-name">Today</strong>
+        <span id="day-date"></span>
+        <button class="adm-link" id="day-today" type="button" hidden>Go back to today</button>
+      </div>
+      <button class="adm-arrow" id="day-next" type="button" aria-label="Next day">→</button>
+    </section>
+
+    <!-- 2. Which time -->
+    <section class="adm-times" id="time-buttons" aria-label="Choose a time"></section>
+
+    <!-- 3. Big actions -->
+    <div class="adm-actions">
+      <button class="adm-btn adm-btn-red adm-btn-huge" id="new-booking" type="button">
+        <span class="adm-plus" aria-hidden="true">+</span>
+        <span>New booking<small lang="ko">새 예약</small></span>
+      </button>
+      <button class="adm-btn adm-btn-plain" id="print-list" type="button">Print this day's list</button>
+    </div>
+
+    <p class="adm-toast" id="toast" role="status" aria-live="polite" hidden></p>
+    <p class="adm-error" id="error" role="alert" hidden></p>
+
+    <!-- 4. Rooms and tables for the chosen time -->
+    <h2 class="adm-heading" id="slot-heading"></h2><p id="pending-summary" class="adm-summary" role="status"></p>
+    <div class="adm-key" aria-hidden="true">
+      <span><i class="key-free"></i> Free</span>
+      <span><i class="key-booked"></i> Booked</span>
+    </div>
+    <section class="adm-rooms" id="rooms"></section>
+    <details class="adm-cancelled"><summary id="cancelled-heading">Cancelled bookings for this day</summary><div id="cancelled-list"></div></details>
+  </main>
+
+  <!-- Print-only list for the whole day -->
+  <section class="adm-print" id="print-sheet" aria-hidden="true"></section>
+
+  <!-- New booking, one question at a time -->
+  <dialog class="adm-dialog adm-flow" id="flow" aria-labelledby="flow-question">
+    <div class="flow-top">
+      <button class="adm-btn adm-btn-plain" id="flow-back" type="button">← Back</button>
+      <span class="flow-step" id="flow-step"></span>
+      <button class="adm-btn adm-btn-plain" id="flow-close" type="button">✕ Close</button>
+    </div>
+    <h2 class="flow-question" id="flow-question"></h2>
+    <p class="flow-help" id="flow-help"></p>
+    <div class="flow-body" id="flow-body"></div>
+    <p class="adm-error" id="flow-error" role="alert" hidden></p>
+  </dialog>
+
+  <!-- Booking details and cancel -->
+  <dialog class="adm-dialog adm-detail" id="detail" aria-labelledby="detail-title">
+    <h2 id="detail-title"></h2>
+    <dl class="detail-list" id="detail-list"></dl>
+    <form id="staff-edit" class="staff-edit" hidden></form>
+    <div class="detail-ask" id="detail-ask" hidden>
+      <p class="detail-warn">Cancel this booking? The table becomes free again.</p>
+    </div>
+    <p class="adm-error" id="detail-error" role="alert" hidden></p>
+    <div class="detail-buttons" id="detail-buttons"></div>
+  </dialog>
+</body>
+</html>
